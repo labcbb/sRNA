@@ -25,9 +25,9 @@ requirements:
     - pyshp
     - python >=3.6
     - bowtie 1.2.3
-	- cutadapt 2.6
-	- findadapt
-	- tDRnamer
+    - cutadapt 2.6
+    - findadapt
+    - tDRnamer
 test:
   imports:
     - sRNA
