@@ -33,14 +33,15 @@ test:
     - sRNA
 
 about:
-  home: "https://github.com/labcbb"
+  home: "https://github.com/labcbb/sRNA"
   license: MIT
   license_family: MIT
   license_file: LICENSE
   summary: "A Python package for sncRNA quantification"
-  doc_url: https://geodemo.gishub.org
+  doc_url: https://github.com/labcbb/sRNA
   dev_url: https://github.com/labcbb
 
 extra:
   recipe-maintainers:
-    - giswqs
+    - labcbb
+    
