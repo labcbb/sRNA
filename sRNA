@@ -383,7 +383,7 @@ rule process_data_4:
     input:
         txt_files = expand(f"{outdir}/sample-fragment/need/{{sample}}.txt", sample=samples)
     output:
-        f"{outdir}/total/SRP385251.txt"
+        f"{outdir}/total/result.txt"
     shell:
         """
         cat {input.txt_files} > {output}
