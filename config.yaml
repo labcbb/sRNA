@@ -12,7 +12,7 @@ INDEX_pre_BT: "sRNA-indexes/premiRNA/premirna"
 INDEX: "sRNA-indexes/tDR/tDR_55"
 INDEX_rRNA_BT: "sRNA-indexes/rRF/rRNA.flank"
 INDEX_snoRNA_BT: "sRNA-indexes/sncRNA/other.sncRNA"
-
+MINTplate: "MINTplates.py"
 
 # tools path（If environment variables have been configured in the user environment, you do not need to write absolute paths）
 bowtie: "bowtie"
