@@ -2,6 +2,7 @@
 # Data path
 sample_dir: "raw_data"
 fastq_suffix: ".fastq.gz"
+tDR_file: "sRNA-indexes/tDR/tDR_55.fa"
 
 # output path（可统一放在 results/ 下）
 outdir: "results"
