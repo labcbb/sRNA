@@ -1,0 +1,23 @@
+# config.yaml 
+# Data path
+sample_dir: "raw_data"
+fastq_suffix: ".fastq.gz"
+
+# output path（可统一放在 results/ 下）
+outdir: "results"
+
+# Reference sequence and index path
+INDEX_BT: "sRNA-indexes/miRNA/mature_ref"
+INDEX_pre_BT: "sRNA-indexes/premiRNA/premirna"
+INDEX: "sRNA-indexes/tDR/tDR_55"
+INDEX_rRNA_BT: "sRNA-indexes/rRF/rRNA.flank"
+INDEX_snoRNA_BT: "sRNA-indexes/sncRNA/other.sncRNA"
+
+
+# tools path（If environment variables have been configured in the user environment, you do not need to write absolute paths）
+bowtie: "bowtie"
+samtools: "samtools"
+cutadapt: "cutadapt"
+fastqc: "fastqc"
+multiqc: "multiqc"
+findadapt: "findadapt"
