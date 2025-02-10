@@ -1,6 +1,7 @@
 # config.yaml 
 # Data path
-sample_dir: "raw_data"
+# 样本列表文件，文件中每一行写一个 fastq 文件的完整路径
+sample_list: "samples.txt"
 fastq_suffix: ".fastq.gz"
 tDR_file: "sRNA-indexes/tDR/tDR_55.fa"
 
