@@ -21,7 +21,7 @@ conda env create -f environment.yml
 conda activate sRNA
 ```
 
-## Running the Workflow
+# Running the Workflow
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
 snakemake -s sRNA --configfile config.yaml --cores 4 --rerun-incomplete
@@ -37,3 +37,9 @@ Here is an explanation of the parameters:
 - `--rerun-incomplete`: This option ensures that Snakemake will rerun any incomplete jobs in case of failure or partial execution.
 
 For more information about additional parameters and options available in Snakemake, you can use the command snakemake -h to view the full help documentation.
+
+# Input File Format
+Before running the analysis, you must provide a sample.txt file that includes the necessary sample information. The file should be formatted as follows:
+- `First column`: Sample names (e.g., sample1, sample2, etc.)
+- `Second column`: The full file path to the corresponding FASTQ file.
+- The structure of the sample.txt file should look like this:
