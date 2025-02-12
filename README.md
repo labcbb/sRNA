@@ -40,6 +40,11 @@ For more information about additional parameters and options available in Snakem
 
 # Input File Format
 Before running the analysis, you must provide a sample.txt file that includes the necessary sample information. The file should be formatted as follows:
-- `First column`: Sample names (e.g., sample1, sample2, etc.)
-- `Second column`: The full file path to the corresponding FASTQ file.
-- The structure of the sample.txt file should look like this:
+- First column: Sample names (e.g., sample1, sample2, etc.)
+- Second column: The full file path to the corresponding FASTQ file.
+  The structure of the sample.txt file should look like this:
+```plaintext
+sample1    /path/to/sample1.fastq.gz
+sample2    /path/to/sample2.fastq.gz
+sample3    /path/to/sample3.fastq.gz
+```
