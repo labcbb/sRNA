@@ -30,10 +30,10 @@ Here is an explanation of the parameters:
 
 - `-s sRNA`: Specifies the Snakefile to use. In this case, test4 is your main workflow file. Replace this with your actual Snakefile name if different.
 
---configfile config.yaml: Specifies the configuration file for the analysis. You should ensure that config.yaml is correctly set up to specify the input data and parameters for the analysis.
+- `--configfile config.yaml`: Specifies the configuration file for the analysis. You should ensure that config.yaml is correctly set up to specify the input data and parameters for the analysis.
 
---cores 4: Specifies the number of CPU cores to use for the workflow. Adjust this number based on the available resources. You can change 4 to any number of cores you want to allocate.
+- `--cores 4`: Specifies the number of CPU cores to use for the workflow. Adjust this number based on the available resources. You can change 4 to any number of cores you want to allocate.
 
---rerun-incomplete: This option ensures that Snakemake will rerun any incomplete jobs in case of failure or partial execution.
+- `--rerun-incomplete`: This option ensures that Snakemake will rerun any incomplete jobs in case of failure or partial execution.
 
 For more information about additional parameters and options available in Snakemake, you can use the command snakemake -h to view the full help documentation.
