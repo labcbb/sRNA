@@ -28,7 +28,7 @@ snakemake -s sRNA --configfile config.yaml --cores 4 --rerun-incomplete
 ```
 Here is an explanation of the parameters:
 
--s sRNA: Specifies the Snakefile to use. In this case, test4 is your main workflow file. Replace this with your actual Snakefile name if different.
+- `-s sRNA`: Specifies the Snakefile to use. In this case, test4 is your main workflow file. Replace this with your actual Snakefile name if different.
 
 --configfile config.yaml: Specifies the configuration file for the analysis. You should ensure that config.yaml is correctly set up to specify the input data and parameters for the analysis.
 
