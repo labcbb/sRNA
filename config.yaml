@@ -1,0 +1,24 @@
+# config.yaml 
+# Data path
+# 样本列表文件，文件中每一行写一个 fastq 文件的完整路径
+sample_list: "samples.txt"
+tDR_file: "sRNA-indexes/tDR/tDR_55.fa"
+
+# output path（可统一放在 results/ 下）
+outdir: "results"
+
+# Reference sequence and index path
+INDEX_BT: "sRNA-indexes/miRNA/mature_ref"
+INDEX_pre_BT: "sRNA-indexes/premiRNA/premirna"
+INDEX: "sRNA-indexes/tDR/tDR_55"
+INDEX_rRNA_BT: "sRNA-indexes/rRF/rRNA.flank"
+INDEX_snoRNA_BT: "sRNA-indexes/sncRNA/other.sncRNA"
+MINTplate: "MINTplates.py"
+
+# tools path（If environment variables have been configured in the user environment, you do not need to write absolute paths）
+bowtie: "bowtie"
+samtools: "samtools"
+cutadapt: "cutadapt"
+fastqc: "fastqc"
+multiqc: "multiqc"
+findadapt: "findadapt"

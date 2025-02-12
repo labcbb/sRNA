@@ -1,0 +1,18 @@
+name: sRNA_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.8
+  - snakemake
+  - samtools
+  - bowtie
+  - cutadapt
+  - fastqc
+  - multiqc
+  - pandas
+  - numpy
+  - matplotlib
+  - seaborn
+  - biopython
