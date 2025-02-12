@@ -6,12 +6,12 @@ This software provides a streamlined solution for small RNA quantification. By s
 To use the sRNA software, you'll need to download and install its dependencies, including findadapt.
 wget https://github.com/labcbb/sRNA/archive/refs/heads/main.zip
 unzip master.zip 
-# 1. Download and Install sRNA
+## 1. Download and Install sRNA
 ```bash
 wget https://github.com/labcbb/sRNA/archive/refs/heads/main.zip
 unzip main.zip
 ```
-# 2. Download and Install FindAdapt
+## 2. Download and Install FindAdapt
 ```bash
 wget https://github.com/chc-code/findadapt/archive/refs/heads/master.zip
 unzip master.zip  # The output folder will be findadapt-master
