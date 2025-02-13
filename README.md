@@ -24,7 +24,7 @@ conda activate sRNA
 # Running the Workflow
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
-snakemake -s sRNA --configfile config.yaml --cores 4 --rerun-incomplete
+snakemake -s test4 --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
 ```
 Here is an explanation of the parameters:
 
@@ -35,6 +35,9 @@ Here is an explanation of the parameters:
 - `--cores 4`: Specifies the number of CPU cores to use for the workflow. Adjust this number based on the available resources. You can change 4 to any number of cores you want to allocate.
 
 - `--rerun-incomplete`: This option ensures that Snakemake will rerun any incomplete jobs in case of failure or partial execution.
+
+- `cutadapt_enabled=true`: Enables the cutadapt tool to remove adapter sequences from the `fastq.gz` file.
+- `cutadapt_enabled=false`: Retains the original `fastq.gz` file data without removing adapter sequences.
 
 For more information about additional parameters and options available in Snakemake, you can use the command snakemake -h to view the full help documentation.
 
