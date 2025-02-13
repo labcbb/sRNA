@@ -24,7 +24,7 @@ conda activate sRNA
 ## Running the Workflow
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
-snakemake -s test4 --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
+snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
 ```
 Here is an explanation of the parameters:
 
