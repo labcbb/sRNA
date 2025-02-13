@@ -21,7 +21,7 @@ conda env create -f environment.yml
 conda activate sRNA
 ```
 
-# Running the Workflow
+## Running the Workflow
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
 snakemake -s test4 --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
@@ -41,7 +41,7 @@ Here is an explanation of the parameters:
 
 For more information about additional parameters and options available in Snakemake, you can use the command snakemake -h to view the full help documentation.
 
-# Input File Format
+## Input File Format
 Before running the analysis, you must provide a sample.txt file that includes the necessary sample information. The file should be formatted as follows:
 - First column: Sample names (e.g., sample1, sample2, etc.)
 - Second column: The full file path to the corresponding FASTQ file.
@@ -51,3 +51,8 @@ sample1    /path/to/sample1.fastq.gz
 sample2    /path/to/sample2.fastq.gz
 sample3    /path/to/sample3.fastq.gz
 ```
+
+## Output Format
+After running the workflow, two main output folders will be generated:
+### 1. multiqc
+This folder contains the multiQC report, which provides an overview of the analysis, including a summary of the quality control results for each FASTQ file processed.  Specifically, the multiqc_report.html file can be used to assess whether adapter sequences have been properly removed from the `FASTQ files`.  This report provides visual insights into the quality of the sequencing data, highlighting any potential issues with adapter contamination.
