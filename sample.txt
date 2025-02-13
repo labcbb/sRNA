@@ -1,0 +1,1 @@
+SRR23717242 /data/home/leijiaxin2/mrna/Pancreaticcancer/SRP425933/SRP425933-sample/SRR23717242.fastq.gz

@@ -1,0 +1,2 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	SRR23717242	/data/home/leijiaxin2/mrna/sRNA/sRNA-main/results/html_fastq/SRR23717242_fastqc.zip
