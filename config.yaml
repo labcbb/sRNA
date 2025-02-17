@@ -9,7 +9,7 @@ outdir: "results"
 
 # Reference sequence and index path
 INDEX_BT: "sRNA-index/miRNA/mature_ref"
-INDEX_pre_BT: "sRNA-index/premiRNA/premirna_index"
+INDEX_pre_BT: "sRNA-index/premiRNA/premirna_index/premirna"
 INDEX: "sRNA-index/tDR/tDR_55"
 INDEX_rRNA_BT: "sRNA-index/rRF/rRNA.flank"
 INDEX_snoRNA_BT: "sRNA-index/sncRNA/other.sncRNA"
