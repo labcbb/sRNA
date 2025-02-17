@@ -55,4 +55,13 @@ sample3    /path/to/sample3.fastq.gz
 ## Output Format
 After running the workflow, two main output folders will be generated:
 ### 1. multiqc
-This folder contains the multiQC report, which provides an overview of the analysis, including a summary of the quality control results for each FASTQ file processed.  Specifically, the multiqc_report.html file can be used to assess whether adapter sequences have been properly removed from the `FASTQ files`.  This report provides visual insights into the quality of the sequencing data, highlighting any potential issues with adapter contamination.
+This folder contains the multiQC report, which provides an overview of the analysis, including a summary of the quality control results for each FASTQ file processed.  Specifically, the `multiqc_report.html` file can be used to assess whether adapter sequences have been properly removed from the FASTQ files.  This report provides visual insights into the quality of the sequencing data, highlighting any potential issues with adapter contamination.
+### 2. total
+This folder contains the main results of the small RNA quantification analysis. The `results.txt` file will have the following columns:
+- `Column 1: Small RNA Nickname` – The unique identifier for each small RNA detected in the analysis.
+- `Column 2: Length` – The length of the small RNA in nucleotides.
+- `Column 3: Count` – The raw count of reads mapped to this small RNA across all samples.
+- `Column 4: CPM` (Counts Per Million) – A normalized measure of the small RNA count, adjusting for library size, allowing for comparison across different samples.
+- `Column 5: Sample Nickname` – The identifier for the sample from which the small RNA data was derived.
+Example of the `results.txt` file format:
+```bash
