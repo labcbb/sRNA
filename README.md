@@ -67,7 +67,12 @@ This folder contains the main results of the small RNA quantification analysis. 
 Example of the `results.txt` file format:
 ```bash
 sncRNAs    length    count    CPM    sample
-smallRNA_1    22    1500    5000    SRRXXX
-smallRNA_2    21    1200    4000    SRRXXX
-smallRNA_3    23    2000    6700    SRRXXX
+smallRNA_1    22    1500    5000    sample1
+smallRNA_2    21    1200    4000    sample1
+smallRNA_3    23    2000    6700    sample1
 ```
+In this example:
+
+- smallRNA_1: A small RNA with a length of 22 nucleotides, appearing 1500 times in sample1 with a CPM of 5000.
+- Each row represents a small RNA detected in a specific sample.
+By using the `results.txt` file, you can explore the small RNA data across multiple samples and gain insights into the abundance and distribution of specific small RNAs in your dataset.
