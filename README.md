@@ -17,6 +17,7 @@ unzip master.zip  # The output folder will be findadapt-master
 
 ## Configure the conda environment
 ```bash
+cd sRNA-main
 conda env create -f environment.yml
 conda activate sRNA
 ```
