@@ -1,4 +1,4 @@
-name: sRNA_env
+name: sRNA
 channels:
   - conda-forge
   - bioconda
