@@ -23,6 +23,18 @@ conda activate sRNA
 ```
 
 ## Running the Workflow
+To run the workflow correctly, you need to ensure that the path to the `findadapt-master` directory is specified correctly. In the command below:
+```bash
+export PATH=$PATH:/data/home/huangrende/mrna/sRNA/sRNA-main/test/findadapt-master
+```
+Replace `/data/home/huangrende/mrna/sRNA/sRNA-main/test/findadapt-master` with the absolute path to your own findadapt-master directory.
+
+For example, if the `findadapt-master` folder is located at `/home/username/findadapt`, you should use:
+```bash
+export PATH=$PATH:/home/username/findadapt-master
+```
+This ensures that the `findadapt` tool is correctly added to the system path and can be executed by the workflow.
+
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
 snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
