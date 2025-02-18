@@ -210,7 +210,7 @@ rule premiRNA_unmap_to_fastq:
 rule process_fastq:
     input:
         fastq_file = f"{outdir}/premiRNA_unmap_fastq/{{sample}}.premiRNA.unmapped.fastq",
-        tDR_file   = "sRNA-indexes/tDR/tDR_55.fa"
+        tDR_file   = "sRNA-index/tDR/tDR_55.fa"
     output:
         output_file   = f"{outdir}/tDR_count/{{sample}}_tDR.txt",
         unmapped_file = f"{outdir}/tRNA_unmap/{{sample}}.tRNA.unmapped.fastq.gz"
