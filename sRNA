@@ -30,6 +30,14 @@ fastqc           = config["fastqc"]
 multiqc          = config["multiqc"]
 findadapt        = config["findadapt"]
 
+# 显式将 cutadapt_enabled 转换为布尔值
+if "cutadapt_enabled" in config:
+    if isinstance(config["cutadapt_enabled"], str):
+        if config["cutadapt_enabled"].lower() == "true":
+            config["cutadapt_enabled"] = True
+        elif config["cutadapt_enabled"].lower() == "false":
+            config["cutadapt_enabled"] = False
+
 # 获取样本名称列表
 samples = list(sample_dict.keys())
 
@@ -39,68 +47,80 @@ rule all:
         expand(f"{outdir}/total/result.txt", sample=samples),
         f"{outdir}/clean_done"
 
-rule findadapt:
-    input:
-        # 直接从 sample_dict 中获取原始 fastq 文件完整路径
-        lambda wc: sample_dict[wc.sample]
-    output:
-       temp(f"{outdir}/findadapt_output/{{sample}}.adapter.txt"),
-    shell:
-        """
-        {findadapt} -o {outdir}/findadapt_output/{wildcards.sample} -cut {input}
-        """
+if config.get("cutadapt_enabled", False):
+    rule findadapt:
+        input:
+            lambda wc: sample_dict[wc.sample]
+        output:
+            temp(f"{outdir}/findadapt_output/{{sample}}.adapter.txt")
+        shell:
+            """
+            {findadapt} -o {outdir}/findadapt_output/{wildcards.sample} -cut {input}
+            """
 
-rule cutadapt:
-    input:
-        fastq   = lambda wc: sample_dict[wc.sample],
-        adapter = f"{outdir}/findadapt_output/{{sample}}.adapter.txt"
-    output:
-        temp(f"{outdir}/fix_fastq/{{sample}}.fastq.gz")
-    shell:
-        r"""
-        # 从 findadapt 输出中提取 adapter（跳过表头，假设 adapter 在第3列），去重后保留为列表
-        found_adapters=$(tail -n +2 {input.adapter} | awk '{{print $3}}' | sort -u)
-        
-        # 默认 adapter 列表（多个 adapter 用空格分隔）
-        default_adapters="AGATCGGAAGAG TGGAATTCTCGG GATCGTCGGACT CTGTCTCTTATA AAAAAAAAAAAA GGGGGGGGGGGG"
-        
-        if [ -z "$found_adapters" ]; then
-            echo "未在 {wildcards.sample} 中检测到 adapter，使用默认 adapter。"
-            adapters="$default_adapters"
-        else
-            use_default=0
-            for found in $found_adapters; do
-                for def in $default_adapters; do
-                    if [ "$found" = "$def" ]; then
-                        use_default=1
-                        break 2
-                    fi
-                done
-            done
-            if [ $use_default -eq 1 ]; then
-                echo "检测到的 adapter与默认 adapter（100%覆盖），因此使用默认 adapter。"
+    rule cutadapt:
+        input:
+            fastq = lambda wc: sample_dict[wc.sample],
+            adapter = f"{outdir}/findadapt_output/{{sample}}.adapter.txt"
+        output:
+            temp(f"{outdir}/fix_fastq/{{sample}}.fastq.gz")
+        shell:
+            r"""
+            # 从 findadapt 输出中提取 adapter（跳过表头，假设 adapter 在第3列），去重后保留为列表
+            found_adapters=$(tail -n +2 {input.adapter} | awk '{{print $3}}' | sort -u)
+
+            # 默认 adapter 列表（多个 adapter 用空格分隔）
+            default_adapters="AGATCGGAAGAG TGGAATTCTCGG GATCGTCGGACT CTGTCTCTTATA AAAAAAAAAAAA GGGGGGGGGGGG"
+
+            if [ -z "$found_adapters" ]; then
+                echo "未在 {wildcards.sample} 中检测到 adapter，使用默认 adapter。"
                 adapters="$default_adapters"
             else
-                echo "使用检测到的 adapter：$found_adapters"
-                adapters="$found_adapters"
+                use_default=0
+                for found in $found_adapters; do
+                    for def in $default_adapters; do
+                        if [ "$found" = "$def" ]; then
+                            use_default=1
+                            break 2
+                        fi
+                    done
+                done
+                if [ $use_default -eq 1 ]; then
+                    echo "检测到的 adapter与默认 adapter（100%覆盖），因此使用默认 adapter。"
+                    adapters="$default_adapters"
+                else
+                    echo "使用检测到的 adapter：$found_adapters"
+                    adapters="$found_adapters"
+                fi
             fi
-        fi
 
-        adapter_opts=""
-        for a in $adapters; do
-            adapter_opts="$adapter_opts -a $a"
-        done
-        echo "最终传递给 cutadapt 的 adapter 参数: $adapter_opts"
-        
-        {cutadapt} -j 8 --max-n 0 -m 10 -M 50 $adapter_opts -o {output} {input.fastq}
-        """
+            adapter_opts=""
+            for a in $adapters; do
+                adapter_opts="$adapter_opts -a $a"
+            done
+            echo "最终传递给 cutadapt 的 adapter 参数: $adapter_opts"
+
+            {cutadapt} -j 8 --max-n 0 -m 10 -M 50 $adapter_opts -o {output} {input.fastq}
+            """
+else:
+    rule cutadapt:
+        input:
+            lambda wc: sample_dict[wc.sample]
+        output:
+            temp(f"{outdir}/fix_fastq/{{sample}}.fastq.gz")
+        shell:
+            """
+            # 当 cutadapt_enabled 为 False 时，直接将原始 FASTQ 文件复制或软链接到 cutadapt 的输出路径
+            mkdir -p {outdir}/fix_fastq/
+            ln -sf {input} {output}
+            """
 
 rule fastQC:
     input:
-        f"{outdir}/fix_fastq/{{sample}}.fastq.gz"
+        lambda wc: f"{outdir}/fix_fastq/{wc.sample}.fastq.gz" if config.get("cutadapt_enabled", False) else sample_dict[wc.sample]
     output:
         html = f"{outdir}/html_fastq/{{sample}}_fastqc.html",
-        zip  = f"{outdir}/html_fastq/{{sample}}_fastqc.zip"
+        zip = f"{outdir}/html_fastq/{{sample}}_fastqc.zip"
     shell:
         "mkdir -p {outdir}/html_fastq/ && {fastqc} -o {outdir}/html_fastq/ {input}"
 
