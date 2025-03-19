@@ -22,3 +22,6 @@ cutadapt: "cutadapt"
 fastqc: "fastqc"
 multiqc: "multiqc"
 findadapt: "findadapt"
+
+# Enable/disable rules
+cutadapt_enabled: true
