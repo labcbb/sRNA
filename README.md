@@ -17,7 +17,7 @@ unzip master.zip  # The output folder will be findadapt-master
 ### 3. Download and Install mirdeep2
 ```bash
 wget https://github.com/rajewsky-lab/mirdeep2/archive/refs/heads/master.zip
-unzip master.zip  # The output folder will be findadapt-master
+unzip master.zip.1  # The output folder will be findadapt-master
 ```
 
 ## Configure the conda environment
