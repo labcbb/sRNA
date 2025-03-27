@@ -1,5 +1,5 @@
 # sRNA
-<img src="https://github.com/labcbb/sRNA/blob/main/figure.jpg?raw=true" width="200" />
+<img src="https://github.com/labcbb/sRNA/blob/main/figure.jpg?raw=true" width="500" />
 
 ##  About sRNA
 This software provides a streamlined solution for small RNA quantification. By simply inputting a fastq.gz file, users can efficiently process and analyze small RNA data, allowing for easy extraction of quantitative insights. Designed to handle the complexity of small RNA sequencing data, it simplifies the workflow, making it accessible for researchers in the field of genomics and bioinformatics. This tool offers a user-friendly approach to the quantification of small RNAs, facilitating further studies in areas like gene regulation, disease mechanisms, and biomarker discovery.
