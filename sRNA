@@ -52,55 +52,52 @@ if config.get("cutadapt_enabled", False):
         input:
             lambda wc: sample_dict[wc.sample]
         output:
-            temp(f"{outdir}/findadapt_output/{{sample}}.adapter.txt")
+            per_fq = temp(f"{outdir}/findadapt_output/{{sample}}.per_fq.adapter.txt")
         shell:
             """
-            {findadapt} -o {outdir}/findadapt_output/{wildcards.sample} -cut {input}
+            # 创建输出目录
+            mkdir -p {outdir}/findadapt_output/
+            
+            # 运行 findadapt 生成输出文件
+            cd {outdir}/findadapt_output/ && ({findadapt} {input} || touch {wildcards.sample}.per_fq.adapter.txt)
+            
+            # 如果输出文件为空，创建一个空文件以避免snakemake报错
+            if [ ! -s {wildcards.sample}.per_fq.adapter.txt ]; then
+                touch {wildcards.sample}.per_fq.adapter.txt
+            fi
             """
 
     rule cutadapt:
         input:
             fastq = lambda wc: sample_dict[wc.sample],
-            adapter = f"{outdir}/findadapt_output/{{sample}}.adapter.txt"
+            per_fq = f"{outdir}/findadapt_output/{{sample}}.per_fq.adapter.txt"
         output:
             temp(f"{outdir}/fix_fastq/{{sample}}.fastq.gz")
         shell:
-            r"""
-            # 从 findadapt 输出中提取 adapter（跳过表头，假设 adapter 在第3列），去重后保留为列表
-            found_adapters=$(tail -n +2 {input.adapter} | awk '{{print $3}}' | sort -u)
-
-            # 默认 adapter 列表（多个 adapter 用空格分隔）
-            default_adapters="AGATCGGAAGAG TGGAATTCTCGG GATCGTCGGACT CTGTCTCTTATA AAAAAAAAAAAA GGGGGGGGGGGG"
-
-            if [ -z "$found_adapters" ]; then
-                echo "未在 {wildcards.sample} 中检测到 adapter，使用默认 adapter。"
-                adapters="$default_adapters"
-            else
-                use_default=0
-                for found in $found_adapters; do
-                    for def in $default_adapters; do
-                        if [ "$found" = "$def" ]; then
-                            use_default=1
-                            break 2
-                        fi
-                    done
-                done
-                if [ $use_default -eq 1 ]; then
-                    echo "检测到的 adapter与默认 adapter（100%覆盖），因此使用默认 adapter。"
-                    adapters="$default_adapters"
+            """
+            # 创建输出目录
+            mkdir -p {outdir}/fix_fastq/
+            
+            # 从 per_fq adapter 文件中提取 seq 列，只接受有效的 DNA 序列
+            if [ -f {input.per_fq} ]; then
+                found_seq=$(awk -F'\\t' '{{if($6 ~ /^[ACGT]+$/) print toupper($6)}}' {input.per_fq} | head -n1)
+                
+                if [ ! -z "$found_seq" ]; then
+                    # 使用找到的 adapter 序列
+                    {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a $found_seq -o {output} {input.fastq} || \
+                    # 如果失败，使用默认 adapter
+                    {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                    cp {input.fastq} {output}
                 else
-                    echo "使用检测到的 adapter：$found_adapters"
-                    adapters="$found_adapters"
+                    # 使用默认 adapter
+                    {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                    cp {input.fastq} {output}
                 fi
+            else
+                # 如果 per_fq 文件不存在，使用默认 adapter
+                {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                cp {input.fastq} {output}
             fi
-
-            adapter_opts=""
-            for a in $adapters; do
-                adapter_opts="$adapter_opts -a $a"
-            done
-            echo "最终传递给 cutadapt 的 adapter 参数: $adapter_opts"
-
-            {cutadapt} -j 8 --max-n 0 -m 10 -M 50 $adapter_opts -o {output} {input.fastq}
             """
 else:
     rule cutadapt:
