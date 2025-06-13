@@ -2,19 +2,19 @@ configfile: "config.yaml"
 
 import os
 
-# 从配置文件中只读取 sample_list 文件中的样本路径
+# Only read the sample paths in the sample_list file from the configuration file（从配置文件中只读取 sample_list 文件中的样本路径）
 sample_list_file = config["sample_list"]
 with open(sample_list_file) as f:
-    # 假设每行是 'sample_name /full/path/to/fastq.gz'
+    #  'sample_name /full/path/to/fastq.gz'
     sample_files = [line.strip() for line in f if line.strip()]
 
-# 构建样本名称到完整路径的映射字典
+# Build a mapping dictionary from sample names to complete paths（构建样本名称到完整路径的映射字典）
 sample_dict = {}
 for line in sample_files:
     sample_name, fastq_path = line.split()
     sample_dict[sample_name] = fastq_path
 
-# 读取其它配置参数
+# Read other configuration parameters（读取其它配置参数）
 outdir           = config["outdir"]
 INDEX_BT         = config["INDEX_BT"]
 INDEX_pre_BT     = config["INDEX_pre_BT"]
@@ -30,7 +30,7 @@ fastqc           = config["fastqc"]
 multiqc          = config["multiqc"]
 findadapt        = config["findadapt"]
 
-# 显式将 cutadapt_enabled 转换为布尔值
+# Explicitly convert cutadapt_enabled to a Boolean value（显式将 cutadapt_enabled 转换为布尔值）
 if "cutadapt_enabled" in config:
     if isinstance(config["cutadapt_enabled"], str):
         if config["cutadapt_enabled"].lower() == "true":
@@ -38,7 +38,7 @@ if "cutadapt_enabled" in config:
         elif config["cutadapt_enabled"].lower() == "false":
             config["cutadapt_enabled"] = False
 
-# 获取样本名称列表
+# Obtain the list of sample names（获取样本名称列表）
 samples = list(sample_dict.keys())
 
 rule all:
@@ -55,13 +55,13 @@ if config.get("cutadapt_enabled", False):
             per_fq = temp(f"{outdir}/findadapt_output/{{sample}}.per_fq.adapter.txt")
         shell:
             """
-            # 创建输出目录
+            # Create output directory（创建输出目录）
             mkdir -p {outdir}/findadapt_output/
             
-            # 运行 findadapt 生成输出文件
+            # Run findadapt to generate the output file（运行 findadapt 生成输出文件）
             cd {outdir}/findadapt_output/ && ({findadapt} {input} || touch {wildcards.sample}.per_fq.adapter.txt)
             
-            # 如果输出文件为空，创建一个空文件以避免snakemake报错
+            # If the output file is empty, create an empty file to avoid snakemake reporting errors（如果输出文件为空，创建一个空文件以避免snakemake报错）
             if [ ! -s {wildcards.sample}.per_fq.adapter.txt ]; then
                 touch {wildcards.sample}.per_fq.adapter.txt
             fi
@@ -75,26 +75,26 @@ if config.get("cutadapt_enabled", False):
             temp(f"{outdir}/fix_fastq/{{sample}}.fastq.gz")
         shell:
             """
-            # 创建输出目录
+            # Create output directory（创建输出目录）
             mkdir -p {outdir}/fix_fastq/
             
-            # 从 per_fq adapter 文件中提取 seq 列，只接受有效的 DNA 序列
+            # Extract the seq columns from the per_fq adapter file and only accept valid DNA sequences（从 per_fq adapter 文件中提取 seq 列，只接受有效的 DNA 序列）
             if [ -f {input.per_fq} ]; then
                 found_seq=$(awk -F'\\t' '{{if($6 ~ /^[ACGT]+$/) print toupper($6)}}' {input.per_fq} | head -n1)
                 
                 if [ ! -z "$found_seq" ]; then
-                    # 使用找到的 adapter 序列
+                    # Use the found adapter sequence（使用找到的 adapter 序列）
                     {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a $found_seq -o {output} {input.fastq} || \
-                    # 如果失败，使用默认 adapter
+                    # If it fails, use the default adapter（如果失败，使用默认 adapter）
                     {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                     cp {input.fastq} {output}
                 else
-                    # 使用默认 adapter
+                    # Use the default adapter（使用默认 adapter）
                     {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                     cp {input.fastq} {output}
                 fi
             else
-                # 如果 per_fq 文件不存在，使用默认 adapter
+                # If the per_fq file does not exist, use the default adapter（如果 per_fq 文件不存在，使用默认 adapter）
                 {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                 cp {input.fastq} {output}
             fi
@@ -107,7 +107,7 @@ else:
             temp(f"{outdir}/fix_fastq/{{sample}}.fastq.gz")
         shell:
             """
-            # 当 cutadapt_enabled 为 False 时，直接将原始 FASTQ 文件复制或软链接到 cutadapt 的输出路径
+            # When cutadapt_enabled is False, directly copy or soft link the original FASTQ file to the output path of cutadapt（当 cutadapt_enabled 为 False 时，直接将原始 FASTQ 文件复制或软链接到 cutadapt 的输出路径）
             mkdir -p {outdir}/fix_fastq/
             ln -sf {input} {output}
             """
@@ -424,9 +424,9 @@ rule process_data_4:
 
 rule clean_up:
     input:
-        f"{outdir}/total/result.txt"  # 作为触发清理任务的依赖
+        f"{outdir}/total/result.txt"  # As a dependency that triggers the cleaning task（作为触发清理任务的依赖）
     output:
-        f"{outdir}/clean_done"  # 一个标志文件，表明清理任务完成
+        f"{outdir}/clean_done"  # A flag file indicating the completion of the cleaning task（一个标志文件，表明清理任务完成）
     shell:
         """
         echo "Cleaning up temporary files and folders..."
@@ -438,5 +438,5 @@ rule clean_up:
         rm -rf {outdir}/fix.rRNA_temp {outdir}/premiRNA_count {outdir}/premiRNA_unmap_fastq
         rm -rf {outdir}/rRNA_unmap {outdir}/findadapt_output {outdir}/rRNA_count_seq
         rm -rf {outdir}/rRNA_license_plates {outdir}/rRNA_count_real_seq {outdir}/premiRNA_unmap {outdir}/sample-fragment
-        touch {output}  # 创建标志文件，表示清理完成
+        touch {output}  # Create a logo file to indicate that the cleaning is completed（创建标志文件，表示清理完成）
         """
