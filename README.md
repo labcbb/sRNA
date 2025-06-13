@@ -23,7 +23,11 @@ cd sRNA-main
 conda env create -f environment.yml
 conda activate sRNA
 ```
-
+## Attention
+If you want to run the script with the sample, please delete the results folder first
+```bash
+rm -r results
+```
 ## Running the Workflow
 To run the workflow correctly, you need to ensure that the path to the `findadapt-master` directory is specified correctly. In the command below:
 ```bash
