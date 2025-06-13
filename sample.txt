@@ -1,6 +1,6 @@
-SRR27330836 /data/home/leijiaxin2/mrna/Pancreaticcancer/SRP425933/SRP425933-sample/SRR23717242.fastq.gz
-SRR27330837 /data/home/leijiaxin2/mrna/Pancreaticcancer/SRP425933/SRP425933-sample/SRR23717242.fastq.gz
-SRR27330838 /data/home/leijiaxin2/mrna/Pancreaticcancer/SRP425933/SRP425933-sample/SRR23717242.fastq.gz
-SRR27330839 /data/home/leijiaxin2/mrna/Pancreaticcancer/SRP425933/SRP425933-sample/SRR23717242.fastq.gz
-SRR27330840 /data/home/leijiaxin2/mrna/Pancreaticcancer/SRP425933/SRP425933-sample/SRR23717242.fastq.gz
-SRR27330841 /data/home/leijiaxin2/mrna/Pancreaticcancer/SRP425933/SRP425933-sample/SRR23717242.fastq.gz
+SRR27330836 example_sample/SRR27330836.fastq.gz
+SRR27330837 example_sample/SRR27330837.fastq.gz
+SRR27330838 example_sample/SRR27330838.fastq.gz
+SRR27330839 example_sample/SRR27330839.fastq.gz
+SRR27330840 example_sample/SRR27330840.fastq.gz
+SRR27330841 example_sample/SRR27330841.fastq.gz
