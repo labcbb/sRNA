@@ -94,4 +94,7 @@ In this example:
 
 - smallRNA_1: A small RNA with a length of 22 nucleotides, appearing 1500 times in sample1 with a CPM of 5000.
 - Each row represents a small RNA detected in a specific sample.
+
+- # Case study
+- 
 By using the `results.txt` file, you can explore the small RNA data across multiple samples and gain insights into the abundance and distribution of specific small RNAs in your dataset.
