@@ -31,19 +31,13 @@ rm -r results
 ## Running the Workflow
 To run the workflow correctly, you need to ensure that the path to the `findadapt-master` directory is specified correctly. In the command below:
 ```bash
-export PATH=$PATH:/data/home/huangrende/mrna/sRNA/sRNA-main/test/findadapt-master
-```
-Replace `/data/home/huangrende/mrna/sRNA/sRNA-main/test/findadapt-master` with the absolute path to your own findadapt-master directory.
-
-For example, if the `findadapt-master` folder is located at `/home/username/findadapt`, you should use:
-```bash
-export PATH=$PATH:/home/username/findadapt-master
+export PATH=$PATH:/path/to/findadapt-master
 ```
 This ensures that the `findadapt` tool is correctly added to the system path and can be executed by the workflow.
 
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
-snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
+snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
 Here is an explanation of the parameters:
 
@@ -57,6 +51,9 @@ Here is an explanation of the parameters:
 
 - `cutadapt_enabled=true`: Enables the cutadapt tool to remove adapter sequences from the `fastq.gz` file.
 - `cutadapt_enabled=false`: Retains the original `fastq.gz` file data without removing adapter sequences.
+
+- `merge_variants=yes`:  Variants of quantitative tDR
+- `merge_variants=no`: Variants of non-quantitative tDR
 
 For more information about additional parameters and options available in Snakemake, you can use the command snakemake -h to view the full help documentation.
 
@@ -90,10 +87,6 @@ smallRNA_1    22    1500    5000    sample1
 smallRNA_2    21    1200    4000    sample1
 smallRNA_3    23    2000    6700    sample1
 ```
-In this example:
-
-- smallRNA_1: A small RNA with a length of 22 nucleotides, appearing 1500 times in sample1 with a CPM of 5000.
-- Each row represents a small RNA detected in a specific sample.
 
 # Case study
 
@@ -136,7 +129,7 @@ SRR14416481  SRR14416481_1.fastq.gz
 
 ```
 cp /path/to/sRNA/config.yaml ./
-snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
+snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
 User can refer the output description in this page. By using the `results.txt` file, you can explore the small RNA data across multiple samples and gain insights into the abundance and distribution of specific small RNAs in your dataset. 
 
@@ -204,7 +197,7 @@ SRR14416481  Treat
 ```
 cat("Starting analysis...\n\n")
 
-group_df <- readr::read_tsv("./group_info.txt")
+group_df <- readr::read_tsv("./CaseStudy/group_info.txt")
 group <- group_df$group
 names(group) <- group_df$sample
 
