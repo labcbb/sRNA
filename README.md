@@ -95,6 +95,139 @@ In this example:
 - smallRNA_1: A small RNA with a length of 22 nucleotides, appearing 1500 times in sample1 with a CPM of 5000.
 - Each row represents a small RNA detected in a specific sample.
 
-- # Case study
-- 
-By using the `results.txt` file, you can explore the small RNA data across multiple samples and gain insights into the abundance and distribution of specific small RNAs in your dataset.
+# Case study
+
+## Backgroud
+
+Recently, a tDR study was published in *Science* (Li et al., A hypoxia-responsive tRNA-derived small RNA confers renal protection through RNA autophagy, 2025, *Science*, https://www.science.org/doi/10.1126/science.adp5384). Li et al. identified two top significant tDR (tDR-1:32-Asp-GTC-2 (tRNA-Asp-GTC-5′tDR) and tDR-39:72-Asp-GTC-2-M2 (tRNA-Asp-GTC-3′tDR)) by comparing hypoxia kidney cells with normoxia cells (below Figure A). Here we show how to use sRNA tool to reproduce the results step by step.
+
+<img src="https://github.com/labcbb/sRNA/blob/main/GSE17380volcano.png?raw=true" />
+
+## Download dataset GSE173806
+
+```
+mkdir GSE173806 && cd GSE173806
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/073/SRR14416473/SRR14416473_1.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/074/SRR14416474/SRR14416474_1.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/075/SRR14416475/SRR14416475_1.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/079/SRR14416479/SRR14416479_1.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/080/SRR14416480/SRR14416480_1.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/081/SRR14416481/SRR14416481_1.fastq.gz
+```
+
+## Run sRNA
+
+Please set up tool environment following the above description and run our tool.
+
+**Input file:** input.tsv
+
+```
+SRR14416473  SRR14416473_1.fastq.gz
+SRR14416474  SRR14416474_1.fastq.gz
+SRR14416475  SRR14416475_1.fastq.gz
+SRR14416479  SRR14416479_1.fastq.gz
+SRR14416480  SRR14416480_1.fastq.gz
+SRR14416481  SRR14416481_1.fastq.gz
+```
+
+**Run**
+
+```
+cp /path/to/sRNA/config.yaml ./
+snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true --cores 4 --rerun-incomplete
+```
+User can refer the output description in this page. By using the `results.txt` file, you can explore the small RNA data across multiple samples and gain insights into the abundance and distribution of specific small RNAs in your dataset. 
+
+
+## Analysis
+
+**Set up R packages**
+
+```{r}
+# install_and_load_packages.R
+options(repos = c(CRAN = "https://cloud.r-project.org/"))
+required_packages <- c("dplyr", "readr", "tidyr", "tibble", "stringr", "ggplot2", "ggpubr")
+
+# check package
+check_and_install <- function(package_name) {
+  if (!require(package_name, character.only = TRUE, quietly = TRUE)) {
+    cat(paste("Installing package:", package_name, "\n"))
+    install.packages(package_name, dependencies = TRUE, quiet = TRUE)
+    library(package_name, character.only = TRUE)
+    cat(paste("Successfully installed and loaded:", package_name, "\n"))
+  } else {
+    cat(paste("Package", package_name, "already installed, loading...\n"))
+  }
+}
+
+cat("Checking and installing CRAN packages...\n")
+for (pkg in required_packages) {
+  check_and_install(pkg)
+}
+
+# install loonR package
+cat("Checking loonR package...\n")
+if (!require("loonR", quietly = TRUE)) {
+  cat("Installing loonR from GitHub...\n")
+  if (!require("devtools", quietly = TRUE)) {
+    cat("Installing devtools...\n")
+    install.packages("devtools", quiet = TRUE)
+    library(devtools)
+  }
+  devtools::install_github("ProfessionalFarmer/loonR", quiet = TRUE)
+  library(loonR)
+  cat("Successfully installed and loaded: loonR\n")
+} else {
+  cat("Package loonR already installed, loading...\n")
+  library(loonR)
+}
+
+cat("All packages loaded successfully!\n")
+```
+
+Please also set up a group_info.txt as below.
+
+```
+sample  group
+SRR14416473  CTRL
+SRR14416474  CTRL
+SRR14416475  CTRL
+SRR14416479  Treat
+SRR14416480  Treat
+SRR14416481  Treat
+```
+
+**Now start analysis**, you can reproduce the Figure B
+
+```
+cat("Starting analysis...\n\n")
+
+group_df <- readr::read_tsv("./group_info.txt")
+group <- group_df$group
+names(group) <- group_df$sample
+
+# read sRNA output
+data = readr::read_tsv("./results/total/result.txt")
+# data$sample <- gsub("_1", "", data$sample)
+data <- data[,-(2:3)]
+data = tidyr::pivot_wider(data, names_from = sample, values_from = CPM)
+data = data %>% tibble::column_to_rownames("sncRNAs")
+data = data[,names(group)]
+
+tdr.data = data[stringr::str_detect(rownames(data), "^tDR"),]
+tdr.data[is.na(tdr.data)] = 0
+tdr.data = log2( tdr.data[rowMeans(tdr.data) > 1,] + 1)
+
+tdr.diff = loonR::limma_differential(tdr.data, group)
+loonR::volcano_plot_V2(tdr.diff$logFC, tdr.diff$adj.P.Val, tdr.diff$REF, p.cutoff = 0.01, logFC.cutoff = 1, 
+                       show.top.n = 0, sig.genes = c( "tDR-1:32-Asp-GTC-2", "tDR-39:72-Asp-GTC-2-M2")  ) + xlim(c(-5,5))
+
+```
+
+# Please feel free to contact us if you have any question.
+
+
+
+
+
+
