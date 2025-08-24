@@ -2,49 +2,64 @@
 <img src="https://github.com/labcbb/sRNA/blob/main/figure.jpg?raw=true" width="800" />
 
 ##  About sRNA
-This software provides a streamlined solution for small RNA quantification. By simply inputting a fastq.gz file, users can efficiently process and analyze small RNA data, allowing for easy extraction of quantitative insights. Designed to handle the complexity of small RNA sequencing data, it simplifies the workflow, making it accessible for researchers in the field of genomics and bioinformatics. This tool offers a user-friendly approach to the quantification of small RNAs, facilitating further studies in areas like gene regulation, disease mechanisms, and biomarker discovery.
+
+This software provides a streamlined solution for small non-conding RNA quantification. By simply inputting a fastq.gz file, users can efficiently process and analyze small non-conding RNA data, allowing for easy extraction of quantitative insights. Designed to handle the complexity of small non-conding RNA sequencing data, it simplifies the workflow, making it accessible for researchers in the field of genomics and bioinformatics. This tool offers a user-friendly approach to the quantification of small non-conding RNAs, facilitating further studies in areas like gene regulation, disease mechanisms, and biomarker discovery.
 
 ## Declaration
-To perform sRNA quantification from a different directory, you must first verify the settings in the `config.yaml` file. It is critical to ensure that the `input path`, `output path`, `reference sequence and index path`, and `tools path` are all accurately configured.
+
+Our software relys on snakemake for pipeline management which requires snakemake config file (here we use config.yaml). To perform sRNA quantification from a different directory (not in sRNA folder), you must first verify the settings in the `config.yaml` file. It is critical to ensure that the `input path`, `output path`, `reference sequence and index path`, and `tools path` are all accurately configured. 
+
+The `config.yaml` has been provided along with this GitHub repository.
 
 ## Installation
+
 To use the sRNA software, you'll need to download and install its dependencies, including findadapt snakemake
+
 ### 1. Download and Install sRNA
+
+Download this GitHub repository to an appropriate location.
+
 ```bash
 wget https://github.com/labcbb/sRNA/archive/refs/heads/main.zip
 unzip main.zip
 ```
-### 2. Download and Install FindAdapt
-```bash
-wget https://github.com/chc-code/findadapt/archive/refs/heads/master.zip
-unzip master.zip  # The output folder will be findadapt-master
-```
 
 ## Configure the conda environment
+
 ```bash
 cd sRNA-main
 conda env create -f environment.yml
 conda activate sRNA
 ```
+## Before running the software for the first time
+
+Suppose you have alreay activated the sRNA environment. The sRNA also relys on findadapt. Before running sRNA for the first time, you are required to install findadapt using below commands.
+
+```
+wget https://github.com/chc-code/findadapt/archive/refs/heads/master.zip
+unzip master.zip  
+mv findadapt-master $CONDA_PREFIX
+chmod +x ${CONDA_PREFIX}/findadapt-master/findadapt 
+ln -s ${CONDA_PREFIX}/findadapt-master/findadapt ${CONDA_PREFIX}/bin
+findadapt -h
+```
+
 ## Attention
 If you want to run the script with the sample, please delete the results folder first
+
 ```bash
 rm -r results
 ```
+
 ## Running the Workflow
-To run the workflow correctly, you need to ensure that the path to the `findadapt-master` directory is specified correctly. In the command below:
-```bash
-export PATH=$PATH:/path/to/findadapt-master
-```
-This ensures that the `findadapt` tool is correctly added to the system path and can be executed by the workflow.
 
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
-snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
+snakemake -s /pathy/to/sRNA-main/sRNA --configfile /pathy/to/sRNA-main/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
 Here is an explanation of the parameters:
 
-- `-s sRNA`: Specifies the Snakefile to use. In this case, test4 is your main workflow file. Replace this with your actual Snakefile name if different.
+- `-s sRNA`: Specifies the Snakefile path to use. In this case, test4 is your main workflow file. Replace this with your actual Snakefile name if different.
 
 - `--configfile config.yaml`: Specifies the configuration file for the analysis. You should ensure that config.yaml is correctly set up to specify the input data and parameters for the analysis.
 
@@ -76,12 +91,12 @@ After running the workflow, two main output folders will be generated:
 ### 1. multiqc
 This folder contains the multiQC report, which provides an overview of the analysis, including a summary of the quality control results for each FASTQ file processed.  Specifically, the `multiqc_report.html` file can be used to assess whether adapter sequences have been properly removed from the FASTQ files.  This report provides visual insights into the quality of the sequencing data, highlighting any potential issues with adapter contamination.
 ### 2. total
-This folder contains the main results of the small RNA quantification analysis. The `results.txt` file will have the following columns:
-- `Column 1: sncRNAs` – The unique identifier for each small RNA detected in the analysis.
-- `Column 2: length` – The length of the small RNA in nucleotides.
-- `Column 3: count` – The raw count of reads mapped to this small RNA across all samples.
-- `Column 4: CPM` (Counts Per Million) – A normalized measure of the small RNA count, adjusting for library size, allowing for comparison across different samples.
-- `Column 5: sample` – The identifier for the sample from which the small RNA data was derived.
+This folder contains the main results of the small non-conding RNA quantification analysis. The `results.txt` file will have the following columns:
+- `Column 1: sncRNAs` – The unique identifier for each small non-conding RNA detected in the analysis.
+- `Column 2: length` – The length of the small non-conding RNA in nucleotides.
+- `Column 3: count` – The raw count of reads mapped to this small non-conding RNA across all samples.
+- `Column 4: CPM` (Counts Per Million) – A normalized measure of the small non-conding RNA count, adjusting for library size, allowing for comparison across different samples.
+- `Column 5: sample` – The identifier for the sample from which the small non-conding RNA data was derived.
 
 Example of the `results.txt` file format:
 ```bash
@@ -95,7 +110,7 @@ smallRNA_3    23    2000    6700    sample1
 
 ## Backgroud
 
-Recently, a tDR study was published in *Science* (Li et al., A hypoxia-responsive tRNA-derived small RNA confers renal protection through RNA autophagy, 2025, *Science*, https://www.science.org/doi/10.1126/science.adp5384). Li et al. identified two top significant tDR (tDR-1:32-Asp-GTC-2 (tRNA-Asp-GTC-5′tDR) and tDR-39:72-Asp-GTC-2-M2 (tRNA-Asp-GTC-3′tDR)) by comparing hypoxia kidney cells with normoxia cells (below Figure A). Here we show how to use sRNA tool to reproduce the results step by step.
+Recently, a tDR study was published in *Science* (Li et al., A hypoxia-responsive tRNA-derived small non-conding RNA confers renal protection through RNA autophagy, 2025, *Science*, https://www.science.org/doi/10.1126/science.adp5384). Li et al. identified two top significant tDR (tDR-1:32-Asp-GTC-2 (tRNA-Asp-GTC-5′tDR) and tDR-39:72-Asp-GTC-2-M2 (tRNA-Asp-GTC-3′tDR)) by comparing hypoxia kidney cells with normoxia cells (below Figure A). Here we show how to use sRNA tool to reproduce the results step by step.
 
 <img src="https://github.com/labcbb/sRNA/blob/main/GSE17380volcano.png?raw=true" />
 
@@ -113,7 +128,7 @@ wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/081/SRR14416481/SRR14416481_1
 
 ## Run sRNA
 
-Before runing, please set up tool environment following the above description (Installation section). 
+Before running, please set up tool environment following the above description (Installation section). 
 
 Then run our tool.
 
@@ -129,12 +144,12 @@ SRR14416481  ./GSE173806/SRR14416481_1.fastq.gz
 ```
 
 **Run**
-
+User can copy config.yaml to working directory or directly use /pathy/to/sRNA-main/config.yaml. Make sure  `input path`, `output path`, `reference sequence and index path`, and `tools path` are set correctly in config.yaml. 
 ```
 cp /path/to/sRNA-main
-snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
+snakemake -s /pathy/to/sRNA-main/sRNA --configfile /pathy/to/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
-User can refer the output description in this page. By using the `results.txt` file, you can explore the small RNA data across multiple samples and gain insights into the abundance and distribution of specific small RNAs in your dataset. 
+User can refer the output description in this page. By using the `results.txt` file, you can explore the small non-conding RNA data across multiple samples and gain insights into the abundance and distribution of specific small non-conding RNAs in your dataset. 
 
 
 ## Analysis
@@ -183,7 +198,7 @@ if (!require("loonR", quietly = TRUE)) {
 cat("All packages loaded successfully!\n")
 ```
 
-Please also set up a group_info.txt as below.
+Please also set up a sample.txt as below.
 
 ```
 sample  group
