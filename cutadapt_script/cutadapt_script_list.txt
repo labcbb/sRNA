@@ -1,0 +1,1 @@
+cutadapt_script/single.SRR23717242.cutadapt.sh

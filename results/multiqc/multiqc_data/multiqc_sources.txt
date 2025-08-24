@@ -1,2 +1,7 @@
 Module	Section	Sample Name	Source
-FastQC	all_sections	SRR23717242	/data/home/leijiaxin2/mrna/sRNA/sRNA-main/results/html_fastq/SRR23717242_fastqc.zip
+FastQC	all_sections	SRR14416473_1	/data/home/huangrende/sRNA-main/results/html_fastq/SRR14416473_1_fastqc.zip
+FastQC	all_sections	SRR14416481_1	/data/home/huangrende/sRNA-main/results/html_fastq/SRR14416481_1_fastqc.zip
+FastQC	all_sections	SRR14416480_1	/data/home/huangrende/sRNA-main/results/html_fastq/SRR14416480_1_fastqc.zip
+FastQC	all_sections	SRR14416475_1	/data/home/huangrende/sRNA-main/results/html_fastq/SRR14416475_1_fastqc.zip
+FastQC	all_sections	SRR14416474_1	/data/home/huangrende/sRNA-main/results/html_fastq/SRR14416474_1_fastqc.zip
+FastQC	all_sections	SRR14416479_1	/data/home/huangrende/sRNA-main/results/html_fastq/SRR14416479_1_fastqc.zip

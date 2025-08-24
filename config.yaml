@@ -25,3 +25,6 @@ findadapt: "findadapt"
 
 # Enable/disable rules
 cutadapt_enabled: true
+
+# Whether to merge tDR variants
+merge_variants: "yes"  # "yes" 或 "no"

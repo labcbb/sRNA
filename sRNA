@@ -1,3 +1,6 @@
+
+
+
 configfile: "config.yaml"
 
 import os
@@ -29,6 +32,9 @@ cutadapt         = config["cutadapt"]
 fastqc           = config["fastqc"]
 multiqc          = config["multiqc"]
 findadapt        = config["findadapt"]
+
+# 添加 merge_variants 参数读取
+merge_variants   = config.get("merge_variants", "yes")
 
 # Explicitly convert cutadapt_enabled to a Boolean value（显式将 cutadapt_enabled 转换为布尔值）
 if "cutadapt_enabled" in config:
@@ -413,7 +419,7 @@ rule process_data_4:
     input:
         txt_files = expand(f"{outdir}/sample-fragment/need/{{sample}}.txt", sample=samples)
     output:
-        f"{outdir}/total/result.txt"
+        f"{outdir}/total/result_raw.txt"
     shell:
         """
         echo -e "sncRNAs\tlength\tcount\tCPM\tsample" > {output};
@@ -422,11 +428,23 @@ rule process_data_4:
         done
         """
 
+rule merge_variants:
+    input:
+        f"{outdir}/total/result_raw.txt"
+    output:
+        f"{outdir}/total/result.txt"
+    params:
+        merge_variants = merge_variants
+    shell:
+        """
+        python merge_variants.py {input} {output} {params.merge_variants}
+        """
+
 rule clean_up:
     input:
-        f"{outdir}/total/result.txt"  # As a dependency that triggers the cleaning task（作为触发清理任务的依赖）
+        f"{outdir}/total/result.txt"
     output:
-        f"{outdir}/clean_done"  # A flag file indicating the completion of the cleaning task（一个标志文件，表明清理任务完成）
+        f"{outdir}/clean_done"
     shell:
         """
         echo "Cleaning up temporary files and folders..."
@@ -438,5 +456,6 @@ rule clean_up:
         rm -rf {outdir}/fix.rRNA_temp {outdir}/premiRNA_count {outdir}/premiRNA_unmap_fastq
         rm -rf {outdir}/rRNA_unmap {outdir}/findadapt_output {outdir}/rRNA_count_seq
         rm -rf {outdir}/rRNA_license_plates {outdir}/rRNA_count_real_seq {outdir}/premiRNA_unmap {outdir}/sample-fragment
-        touch {output}  # Create a logo file to indicate that the cleaning is completed（创建标志文件，表示清理完成）
+        rm -f {outdir}/total/result_raw.txt
+        touch {output}
         """
