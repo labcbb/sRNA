@@ -15,7 +15,7 @@ The `config.yaml` has been provided along with this GitHub repository.
 
 To use the sRNA software, you'll need to download and install its dependencies, including findadapt snakemake
 
-### 1. Download and Install sRNA
+## Download and Install sRNA
 
 Download this GitHub repository to an appropriate location.
 
