@@ -7,7 +7,7 @@ dependencies:
   - python=3.8
   - snakemake
   - samtools
-  - bowtie
+  - bowtie=1.3.1
   - cutadapt
   - fastqc
   - multiqc
