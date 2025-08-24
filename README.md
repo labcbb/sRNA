@@ -117,7 +117,7 @@ Before runing, please set up tool environment following the above description (I
 
 Then run our tool.
 
-**Input file:** sample.txt
+**Input file:** `sample.txt`
 
 ```
 SRR14416473  ./GSE173806/SRR14416473_1.fastq.gz
