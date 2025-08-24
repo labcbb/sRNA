@@ -16,3 +16,6 @@ dependencies:
   - matplotlib
   - seaborn
   - biopython
+  - pip:
+    - pyahocorasick
+
