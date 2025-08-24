@@ -117,7 +117,9 @@ wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR144/081/SRR14416481/SRR14416481_1
 
 ## Run sRNA
 
-Please set up tool environment following the above description and run our tool.
+Before runing, please set up tool environment following the above description (Installation section). 
+
+Then run our tool.
 
 **Input file:** input.tsv
 
