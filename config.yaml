@@ -1,13 +1,12 @@
 # config.yaml 
 # Data path
-# 样本列表文件，文件中每一行写一个 fastq 文件的完整路径
-sample_list: "sample.txt"
-tDR_file: "sRNA-index/tDR/tDR_55.fa"
+sample_list: "sample.txt" # Sample list file, with each line in the file writing the complete path of a fastq file
+tDR_file: "sRNA-index/tDR/tDR_55.fa" #For tDR quantitative fa files, if you need to change the folder to run, an absolute path is required
 
-# output path（可统一放在 results/ 下）
-outdir: "results"
+# output path 
+outdir: "results" #If you need to generate the folder in the specified path, you need to modify it to the specified path
 
-# Reference sequence and index path
+# Reference sequence and index path（If you are not in the sRNA-main folder, an absolute path is required）
 INDEX_BT: "sRNA-index/miRNA/mature_ref"
 INDEX_pre_BT: "sRNA-index/premiRNA/premirna_index/premirna"
 INDEX: "sRNA-index/tDR/tDR_55"
@@ -23,8 +22,8 @@ fastqc: "fastqc"
 multiqc: "multiqc"
 findadapt: "findadapt"
 
-# Enable/disable rules
-cutadapt_enabled: true
+# Enable/disable rules（"true" or "false"）
+cutadapt_enabled: true # Is it necessary to use cutadapt to join the joints
 
-# Whether to merge tDR variants
-merge_variants: "yes"  # "yes" 或 "no"
+# Whether to tDR variants（"yes" or "no"）
+merge_variants: "yes"  # Is it necessary to display the tDR variant
