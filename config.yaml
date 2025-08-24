@@ -1,5 +1,5 @@
 # config.yaml 
-# Data path
+# input path
 sample_list: "sample.txt" # Sample list file, with each line in the file writing the complete path of a fastq file
 
 # output path 
