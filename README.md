@@ -4,6 +4,9 @@
 ##  About sRNA
 This software provides a streamlined solution for small RNA quantification. By simply inputting a fastq.gz file, users can efficiently process and analyze small RNA data, allowing for easy extraction of quantitative insights. Designed to handle the complexity of small RNA sequencing data, it simplifies the workflow, making it accessible for researchers in the field of genomics and bioinformatics. This tool offers a user-friendly approach to the quantification of small RNAs, facilitating further studies in areas like gene regulation, disease mechanisms, and biomarker discovery.
 
+## Declaration
+To perform sRNA quantification from a different directory, you must first verify the settings in the config.yaml file. It is critical to ensure that the input, output, reference sequence and index, and tools paths are all accurately configured.
+
 ## Installation
 To use the sRNA software, you'll need to download and install its dependencies, including findadapt snakemake
 ### 1. Download and Install sRNA
