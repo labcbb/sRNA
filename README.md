@@ -114,7 +114,7 @@ Before runing, please set up tool environment following the above description (I
 
 Then run our tool.
 
-**Input file:** input.tsv
+**Input file:** sample.txt
 
 ```
 SRR14416473  ./GSE173806/SRR14416473_1.fastq.gz
@@ -128,7 +128,7 @@ SRR14416481  ./GSE173806/SRR14416481_1.fastq.gz
 **Run**
 
 ```
-cp /path/to/sRNA/config.yaml ./
+cp /path/to/sRNA-main
 snakemake -s sRNA --configfile config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
 User can refer the output description in this page. By using the `results.txt` file, you can explore the small RNA data across multiple samples and gain insights into the abundance and distribution of specific small RNAs in your dataset. 
