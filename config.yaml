@@ -8,7 +8,7 @@ outdir: "results" #If you need to generate the folder in the specified path, you
 # sRNA base directory
 # If the config.yaml and snakemake file locates in sRNA-main directory, base_dir should be ./
 # Other wise, set the config.yaml absolute path.
-base_dir = "./"
+base_dir: "./"
 
 # Reference sequence and index path（If you are not in the sRNA-main folder, an absolute path is required）
 INDEX_BT: base_dir + "sRNA-index/miRNA/mature_ref"
