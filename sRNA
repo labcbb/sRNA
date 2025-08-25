@@ -1,8 +1,5 @@
 
 
-
-configfile: "config.yaml"
-
 import os
 
 # Only read the sample paths in the sample_list file from the configuration file（从配置文件中只读取 sample_list 文件中的样本路径）
