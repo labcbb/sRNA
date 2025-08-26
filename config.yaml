@@ -11,13 +11,13 @@ outdir: "results" #If you need to generate the folder in the specified path, you
 base_dir: "./"
 
 # Reference sequence and index path（If you are not in the sRNA-main folder, an absolute path is required）
-INDEX_BT: base_dir + "sRNA-index/miRNA/mature_ref"
-INDEX_pre_BT: base_dir + "sRNA-index/premiRNA/premirna_index/premirna"
-INDEX: base_dir + "sRNA-index/tDR/tDR_55"
-INDEX_rRNA_BT: base_dir + "sRNA-index/rRF/rRNA.flank"
-INDEX_snoRNA_BT: base_dir + "sRNA-index/sncRNA/other.sncRNA"
-tDR_file: base_dir + "sRNA-index/tDR/tDR_55.fa"
-MINTplate: base_dir + "MINTplates.py"
+INDEX_BT: "./sRNA-index/miRNA/mature_ref"
+INDEX_pre_BT: "./sRNA-index/premiRNA/premirna_index/premirna"
+INDEX: "./sRNA-index/tDR/tDR_55"
+INDEX_rRNA_BT: "./sRNA-index/rRF/rRNA.flank"
+INDEX_snoRNA_BT: "./sRNA-index/sncRNA/other.sncRNA"
+tDR_file: "./sRNA-index/tDR/tDR_55.fa"
+MINTplate: "./MINTplates.py"
 
 # tools path（If environment variables have been configured in the user environment, you do not need to write absolute paths）
 bowtie: "bowtie"
