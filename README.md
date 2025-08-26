@@ -198,7 +198,7 @@ if (!require("loonR", quietly = TRUE)) {
 cat("All packages loaded successfully!\n")
 ```
 
-Please also set up a sample.txt as below.
+Please also set up a group_info.txt in CaseStudy file.
 
 ```
 sample  group
@@ -215,11 +215,15 @@ SRR14416481  Treat
 ```
 cat("Starting analysis...\n\n")
 
+## Please note that this is the grouping information. If your grouping is not in this place, it needs to be modified
+
 group_df <- readr::read_tsv("./CaseStudy/group_info.txt")
 group <- group_df$group
 names(group) <- group_df$sample
 
 # read sRNA output
+## Please note that this is quantitative data. If your data is not in this place, it needs to be modified
+
 data = readr::read_tsv("./results/total/result.txt")
 # data$sample <- gsub("_1", "", data$sample)
 data <- data[,-(2:3)]
