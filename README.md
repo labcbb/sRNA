@@ -144,11 +144,14 @@ SRR14416481  ./GSE173806/SRR14416481_1.fastq.gz
 ```
 
 **Run**
+
 User can copy config.yaml to working directory or directly use /pathy/to/sRNA-main/config.yaml. Make sure  `input path`, `output path`, `reference sequence and index path`, and `tools path` are set correctly in config.yaml. 
+
 ```
 cp /path/to/sRNA-main
 snakemake -s /pathy/to/sRNA-main/sRNA --configfile /pathy/to/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
+
 User can refer the output description in this page. By using the `results.txt` file, you can explore the small non-conding RNA data across multiple samples and gain insights into the abundance and distribution of specific small non-conding RNAs in your dataset. 
 
 
@@ -198,7 +201,7 @@ if (!require("loonR", quietly = TRUE)) {
 cat("All packages loaded successfully!\n")
 ```
 
-Please also set up a group_info.txt in CaseStudy file. #You should need to use `Tab` to separate `sample` from `group`
+Please also set up a group_info.txt in CaseStudy file. **You should need to use `Tab` to separate `sample` from `group`**
 
 ```
 sample  group
@@ -254,7 +257,7 @@ cat("Analysis completed successfully!\n")
 
 ```
 
-# Please feel free to contact us if you have any question.
+## Please feel free to contact us if you have any question
 
 
 
