@@ -198,7 +198,7 @@ if (!require("loonR", quietly = TRUE)) {
 cat("All packages loaded successfully!\n")
 ```
 
-Please also set up a group_info.txt in CaseStudy file.
+Please also set up a group_info.txt in CaseStudy file. #You should need to use `Tab` to separate `sample` from `group`
 
 ```
 sample  group
@@ -225,7 +225,7 @@ names(group) <- group_df$sample
 ## Please note that this is quantitative data. If your data is not in this place, it needs to be modified
 
 data = readr::read_tsv("./results/total/result.txt")
-# data$sample <- gsub("_1", "", data$sample)
+data$sample <- gsub("_1", "", data$sample)
 data <- data[,-(2:3)]
 data = tidyr::pivot_wider(data, names_from = sample, values_from = CPM)
 data = data %>% tibble::column_to_rownames("sncRNAs")
@@ -236,8 +236,21 @@ tdr.data[is.na(tdr.data)] = 0
 tdr.data = log2( tdr.data[rowMeans(tdr.data) > 1,] + 1)
 
 tdr.diff = loonR::limma_differential(tdr.data, group)
-loonR::volcano_plot_V2(tdr.diff$logFC, tdr.diff$adj.P.Val, tdr.diff$REF, p.cutoff = 0.01, logFC.cutoff = 1, 
+loonR::volcano_plot_V2(tdr.diff$logFC, tdr.diff$adj.P.Val, tdr.diff$REF, p.cutoff = 0.01, logFC.cutoff = 1,
                        show.top.n = 0, sig.genes = c( "tDR-1:32-Asp-GTC-2", "tDR-39:72-Asp-GTC-2-M2")  ) + xlim(c(-5,5))
+
+tdr.diff$Gene = NA
+tdr.diff[c( "tDR-1:32-Asp-GTC-2", "tDR-39:72-Asp-GTC-2-M2"), ]$Gene = c( "tDR-1:32-Asp-GTC-2", "tDR-39:72-Asp-GTC-2-M2")
+tdr.diff = tdr.diff %>% arrange(desc(logFC))
+tdr.diff$rank = 1:nrow(tdr.diff)
+
+p <- ggpubr::ggscatter(tdr.diff, x= "rank", y = "logFC", ylab = "logFC", repel = T, label = "Gene", color = "gray", font.label = c(14, "bold", "black"))
+
+# Save the picture
+ggsave("tdr_analysis_plot.png", p, width = 10, height = 8, dpi = 300)
+cat("Plot saved as: tdr_analysis_plot.png\n")
+
+cat("Analysis completed successfully!\n")
 
 ```
 
