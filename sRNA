@@ -33,13 +33,13 @@ findadapt        = config["findadapt"]
 # 添加 merge_variants 参数读取
 merge_variants   = config.get("merge_variants", "yes")
 
-# Explicitly convert cutadapt_enabled to a Boolean value（显式将 cutadapt_enabled 转换为布尔值）
-if "cutadapt_enabled" in config:
-    if isinstance(config["cutadapt_enabled"], str):
-        if config["cutadapt_enabled"].lower() == "true":
-            config["cutadapt_enabled"] = True
-        elif config["cutadapt_enabled"].lower() == "false":
-            config["cutadapt_enabled"] = False
+# Explicitly convert _enabled to a Boolean value（显式将 _enabled 转换为布尔值）
+if "_enabled" in config:
+    if isinstance(config["_enabled"], str):
+        if config["_enabled"].lower() == "true":
+            config["_enabled"] = True
+        elif config["_enabled"].lower() == "false":
+            config["_enabled"] = False
 
 # Obtain the list of sample names（获取样本名称列表）
 samples = list(sample_dict.keys())
@@ -50,7 +50,7 @@ rule all:
         expand(f"{outdir}/total/result.txt", sample=samples),
         f"{outdir}/clean_done"
 
-if config.get("cutadapt_enabled", False):
+if config.get("_enabled", False):
     rule findadapt:
         input:
             lambda wc: sample_dict[wc.sample]
@@ -70,7 +70,7 @@ if config.get("cutadapt_enabled", False):
             fi
             """
 
-    rule cutadapt:
+    rule :
         input:
             fastq = lambda wc: sample_dict[wc.sample],
             per_fq = f"{outdir}/findadapt_output/{{sample}}.per_fq.adapter.txt"
@@ -87,13 +87,13 @@ if config.get("cutadapt_enabled", False):
                 
                 if [ ! -z "$found_seq" ]; then
                     # Use the found adapter sequence（使用找到的 adapter 序列）
-                    {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a $found_seq -o {output} {input.fastq} || \
+                    {} -j 8 --max-n 0 -m 10 -M 50 -a $found_seq -o {output} {input.fastq} || \
                     # If it fails, use the default adapter（如果失败，使用默认 adapter）
-                    {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                    {} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                     cp {input.fastq} {output}
                 else
                     # Use the default adapter（使用默认 adapter）
-                    {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                    {} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                     cp {input.fastq} {output}
                 fi
             else
@@ -141,7 +141,7 @@ rule bt_mapping:
     log:
         temp(f"{outdir}/log_miRNA_sam/{{sample}}.miRNA.aln.log")
     shell:
-        "zcat {input} | bowtie --seedlen 15 -p 1 -k1 -v1 -m2 -M1 --best -S {INDEX_BT} - 2> {log} > {output}"
+        "zcat {input} | {bowtie} --seedlen 15 -p 1 -k1 -v1 -m2 -M1 --best -S {INDEX_BT} - 2> {log} > {output}"
 
 rule miRNA_sort:
     input:
@@ -183,7 +183,7 @@ rule premirna_mapping:
     log:
         f"{outdir}/log_premiRNA_sam/{{sample}}.premiRNA.aln.log"
     shell:
-        "{samtools} fastq {input} | bowtie --seedlen 15 -p 1 -k1 -v1 -m10 -M1 --best --strata --chunkmbs 8000 -S {INDEX_pre_BT} - 2> {log} > {output}"
+        "{samtools} fastq {input} | {bowtie} --seedlen 15 -p 1 -k1 -v1 -m10 -M1 --best --strata --chunkmbs 8000 -S {INDEX_pre_BT} - 2> {log} > {output}"
 
 rule premiRNA_sort:
     input:
@@ -243,7 +243,7 @@ rule rRNA_mapping:
     output:
         f"{outdir}/rRNA_sam/{{sample}}.rRNA.aln.sam"
     shell:
-        "zcat {input} | bowtie --seedlen 15 -p 1 -k1 -v1 -m10 -M1 --best --strata --chunkmbs 8000 -S {INDEX_rRNA_BT} - > {output}"
+        "zcat {input} | {bowtie} --seedlen 15 -p 1 -k1 -v1 -m10 -M1 --best --strata --chunkmbs 8000 -S {INDEX_rRNA_BT} - > {output}"
 
 rule rRNA_sort:
     input:
@@ -310,7 +310,7 @@ rule sncRNA_mapping:
     log:
         f"{outdir}/log_sncRNA_sam/{{sample}}.sncRNA.aln.log"
     shell:
-        "{samtools} fastq {input} | /data/home/leijiaxin2/miniconda3/bin/bowtie --seedlen 15 -p 1 -k1 -v1 -m2 -M1 --best --strata --chunkmbs 8000 -S {INDEX_snoRNA_BT} - 2> {log} > {output}"
+        "{samtools} fastq {input} | {bowtie} --seedlen 15 -p 1 -k1 -v1 -m2 -M1 --best --strata --chunkmbs 8000 -S {INDEX_snoRNA_BT} - 2> {log} > {output}"
 
 rule sncRNA_sort:
     input:
