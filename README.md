@@ -61,7 +61,7 @@ config.yaml includes multiple parameter, e.g., sample_list (sample information t
 
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
 ```bash
-snakemake -s /pathy/to/sRNA-main/sRNA --configfile /pathy/to/sRNA-main/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
+snakemake -s /path/to/sRNA-main/sRNA --configfile /path/to/sRNA-main/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
 Here is an explanation of the parameters:
 
@@ -151,11 +151,11 @@ SRR14416481  ./GSE173806/SRR14416481_1.fastq.gz
 
 **Run**
 
-User can copy config.yaml to working directory or directly use /pathy/to/sRNA-main/config.yaml. Make sure  `input path`, `output path`, `reference sequence and index path`, and `tools path` are set correctly in config.yaml. 
+User can copy config.yaml to working directory or directly use /path/to/sRNA-main/config.yaml. Make sure  `input path`, `output path`, `reference sequence and index path`, and `tools path` are set correctly in config.yaml. 
 
 ```
 cd /path/to/sRNA-main
-snakemake -s /pathy/to/sRNA-main/sRNA --configfile /pathy/to/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
+snakemake -s /path/to/sRNA-main/sRNA --configfile /path/to/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
 
 User can refer the output description in this page. By using the `results.txt` file, you can explore the small non-conding RNA data across multiple samples and gain insights into the abundance and distribution of specific small non-conding RNAs in your dataset. 
