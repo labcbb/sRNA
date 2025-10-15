@@ -148,7 +148,7 @@ SRR14416481  ./GSE173806/SRR14416481_1.fastq.gz
 User can copy config.yaml to working directory or directly use /pathy/to/sRNA-main/config.yaml. Make sure  `input path`, `output path`, `reference sequence and index path`, and `tools path` are set correctly in config.yaml. 
 
 ```
-cp /path/to/sRNA-main
+cd /path/to/sRNA-main
 snakemake -s /pathy/to/sRNA-main/sRNA --configfile /pathy/to/config.yaml --config cutadapt_enabled=true merge_variants=yes --cores 4 --rerun-incomplete
 ```
 
