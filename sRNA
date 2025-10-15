@@ -29,6 +29,7 @@ cutadapt         = config["cutadapt"]
 fastqc           = config["fastqc"]
 multiqc          = config["multiqc"]
 findadapt        = config["findadapt"]
+minLength        = config["cutadapt_min_legnth"]
 
 # 添加 merge_variants 参数读取
 merge_variants   = config.get("merge_variants", "yes")
@@ -87,18 +88,18 @@ if config.get("_enabled", False):
                 
                 if [ ! -z "$found_seq" ]; then
                     # Use the found adapter sequence（使用找到的 adapter 序列）
-                    {} -j 8 --max-n 0 -m 10 -M 50 -a $found_seq -o {output} {input.fastq} || \
+                    {cutadapt} -j 8 --max-n 0 -m {minLength} -M 50 -a $found_seq -o {output} {input.fastq} || \
                     # If it fails, use the default adapter（如果失败，使用默认 adapter）
-                    {} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                    {cutadapt} -j 8 --max-n 0 -m {minLength} -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                     cp {input.fastq} {output}
                 else
                     # Use the default adapter（使用默认 adapter）
-                    {} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                    {cutadapt} -j 8 --max-n 0 -m {minLength} -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                     cp {input.fastq} {output}
                 fi
             else
                 # If the per_fq file does not exist, use the default adapter（如果 per_fq 文件不存在，使用默认 adapter）
-                {cutadapt} -j 8 --max-n 0 -m 10 -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
+                {cutadapt} -j 8 --max-n 0 -m {minLength} -M 50 -a AGATCGGAAGAG -a TGGAATTCTCGG -a GATCGTCGGACT -a CTGTCTCTTATA -o {output} {input.fastq} || \
                 cp {input.fastq} {output}
             fi
             """
