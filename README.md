@@ -51,6 +51,12 @@ If you want to run the script with the sample, please delete the results folder 
 rm -r results
 ```
 
+## Familiarize config.yaml
+
+config.yaml includes multiple parameter, e.g., sample_list (sample information txt path), outdir (output directory), and et al. User should understand the paramter and adjust as needed. Most of the cases, user can use default paramter. In case of use have multiple project and directory, config.yaml can be copied into diffierent location and use user specific parameter setting. 
+
+<img src="https://github.com/labcbb/sRNA/blob/main/parameter.png?raw=true" />
+
 ## Running the Workflow
 
 Once the environment is set up, you can run the sRNA analysis workflow with the following Snakemake command:
