@@ -29,6 +29,7 @@ findadapt: "findadapt"
 
 # Enable/disable rules（"true" or "false"）
 cutadapt_enabled: true # Is it necessary to use cutadapt to join the joints
+cutadapt_min_legnth: 10
 
 # Whether to tDR variants（"yes" or "no"）
 merge_variants: "yes"  # Is it necessary to display the tDR variant
