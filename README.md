@@ -53,9 +53,9 @@ rm -r results
 
 ## Familiarize config.yaml
 
-config.yaml includes multiple parameter, e.g., sample_list (sample information txt path), outdir (output directory), and et al. User should understand the paramter and adjust as needed. Most of the cases, user can use default paramter. In case of use have multiple project and directory, config.yaml can be copied into diffierent location and use user specific parameter setting. 
+config.yaml includes multiple parameter, e.g., sample_list (sample information txt path), outdir (output directory), and et al. User should understand the paramter and adjust as needed. Most of the cases, user can use default parameter. In case of use have multiple project and directory, config.yaml can be copied into diffierent location and use user specific parameter setting. 
 
-<img src="https://github.com/labcbb/sRNA/blob/main/parameter.png?raw=true" />
+<img src="https://github.com/labcbb/sRNA/blob/main/Parameter.png?raw=true" />
 
 ## Running the Workflow
 
