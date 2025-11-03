@@ -35,12 +35,12 @@ minLength        = config["cutadapt_min_legnth"]
 merge_variants   = config.get("merge_variants", "yes")
 
 # Explicitly convert _enabled to a Boolean value（显式将 _enabled 转换为布尔值）
-if "_enabled" in config:
-    if isinstance(config["_enabled"], str):
-        if config["_enabled"].lower() == "true":
-            config["_enabled"] = True
-        elif config["_enabled"].lower() == "false":
-            config["_enabled"] = False
+if "cutadapt_enabled" in config:
+    if isinstance(config["cutadapt_enabled"], str):
+        if config["cutadapt_enabled"].lower() == "true":
+            config["cutadapt_enabled"] = True
+        elif config["cutadapt_enabled"].lower() == "false":
+            config["cutadapt_enabled"] = False
 
 # Obtain the list of sample names（获取样本名称列表）
 samples = list(sample_dict.keys())
@@ -51,7 +51,7 @@ rule all:
         expand(f"{outdir}/total/result.txt", sample=samples),
         f"{outdir}/clean_done"
 
-if config.get("_enabled", False):
+if config.get("cutadapt_enabled", False):
     rule findadapt:
         input:
             lambda wc: sample_dict[wc.sample]
