@@ -78,7 +78,8 @@ def process_variants(input_file, output_file, merge_option):
         
         # 按照清理后的第一列和第五列（sample）分组，合并第三列（count）和第四列（CPM）
         # 修正：添加所有需要保留的列
-        merged_df = df.groupby(['sncRNAs_clean', 'sample', 'length']).agg({
+        merged_df = df.groupby(['sncRNAs_clean', 'sample']).agg({
+            'length': 'max',
             'count': 'sum',
             'CPM': 'sum'
         }).reset_index()
