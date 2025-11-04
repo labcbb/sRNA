@@ -292,7 +292,16 @@ rule rRNA_license_plate:
     output:
         f"{outdir}/rRNA_license_plates/{{sample}}.rRNA.aln.mapped.reads.seq.license.plates"
     shell:
-        "python {MINTplate} --p rRF {input} en > {output}"
+        """
+        # 过滤掉包含N的序列
+        grep -v 'N' {input} > {input}.clean || true
+        
+        # 运行 MINTplates.py
+        python ./MINTplates.py --p rRF {input}.clean en > {output}
+        
+        # 清理临时文件
+        rm -f {input}.clean
+        """
 
 rule rRNA_count_license_plate:
     input:
