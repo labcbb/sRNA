@@ -265,7 +265,7 @@ cat("Analysis completed successfully!\n")
 
 ## Please feel free to contact us if you have any question
 
-
+Rende Huang, Jiang Li, Qi Cao, Lixia Wang, Zhixiong Shao, Haochun Yang, Xinlei Zhang, Chuanlai Yang, Xiangya Kong, Qiuyue Gu, Jianmin Wu, Tsan- Yu Chiu, Penghu Lian, Kui Wu, Feng Gao, Zhongxu Zhu, PCsRNAdb: a comprehensive resource of small noncoding RNAs across cancers, Nucleic Acids Research, 2025; gkaf992, https://doi.org/10.1093/nar/gkaf992.
 
 
 
